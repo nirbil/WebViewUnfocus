@@ -18,9 +18,23 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
+                    <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <TextBox x:Name="FocusTarget" Margin="25" Grid.Column="0"/>
-                <Button x:Name="SchedBtn" Click="SchedFocusClicked" Margin="25" Grid.Column="1" Content="Schedule Focus Timer (3)"/>
+                <TextBox x:Name="FocusTarget"
+                         Grid.Column="0"
+                         Margin="25"/>
+                <Button x:Name="SchedBtn" 
+                        Grid.Column="1" 
+                        HorizontalAlignment="Center"
+                        Click="SchedFocusClicked"
+                        Margin="25"
+                        Content="Schedule Focus Timer (3)"/>
+                <Button x:Name="SchedBtn2"
+                        Grid.Column="2" 
+                        HorizontalAlignment="Center" 
+                        Click="SchedFocus2Clicked"
+                        Margin="25"
+                        Content="Schedule Focus Timer with activation (3)"/>
             </Grid>
         </ContentPresenter>
         <ContentPresenter x:Name="WebViewWrapper" Grid.Row="1"/>

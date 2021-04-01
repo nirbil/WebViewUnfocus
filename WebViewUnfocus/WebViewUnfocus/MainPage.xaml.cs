@@ -25,8 +25,7 @@ namespace WebViewUnfocus
     public sealed partial class MainPage : Page
     {
         CancellationTokenSource _currCts = null;
-        string _buttonText = "Schedule Focus Timer (x)";
-
+        
         public MainPage()
         {
             this.InitializeComponent();
@@ -46,10 +45,21 @@ namespace WebViewUnfocus
             }
 
             _currCts = new CancellationTokenSource();
-            CountdownActivateFocus(_currCts, 3);
+            CountdownActivateFocus(_currCts, SchedBtn, "Schedule focus timer(x)", 3, false);
         }
 
-        private void CountdownActivateFocus(CancellationTokenSource cts, int countdown)
+        private void SchedFocus2Clicked(object sender, RoutedEventArgs e)
+        {
+            if (_currCts != null)
+            {
+                _currCts.Cancel();
+            }
+
+            _currCts = new CancellationTokenSource();
+            CountdownActivateFocus(_currCts, SchedBtn2, "Schedule focus timer with activation (x)", 3, true);
+        }
+
+        private void CountdownActivateFocus(CancellationTokenSource cts, Button targetButton, string buttonTextTemplate, int countdown, bool activate)
         {
             
             _= Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
@@ -59,19 +69,23 @@ namespace WebViewUnfocus
                     return;
                 }
 
-                SchedBtn.Content = _buttonText.Replace("x", countdown.ToString());
+                targetButton.Content = buttonTextTemplate.Replace("x", countdown.ToString());
                 countdown--;
                 if (countdown >= 0)
                 {
                     Task.Delay(1000).ContinueWith((task) =>
                     {
-                        CountdownActivateFocus(cts, countdown);
+                        CountdownActivateFocus(cts, targetButton, buttonTextTemplate, countdown, activate);
                     });
                 }
 
                 else
                 {
                     FocusTarget.Focus(FocusState.Programmatic);
+                    if (activate)
+                    {
+                        _ = Windows.System.Launcher.LaunchUriAsync(new Uri("mycustomprotocol:"));
+                    }
                 }
             });
         }
